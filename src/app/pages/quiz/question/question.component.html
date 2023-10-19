@@ -1,0 +1,14 @@
+<div *ngIf="questionData">
+    <p>{{ questionData.question }}</p>
+    <div *ngIf="questionData.type === 'mcq_single' || questionData.type === 'mcq_multiple'">
+        <div *ngFor="let option of questionData.options">
+            <!-- Depending on the question type, show radio buttons or checkboxes -->
+            <input type="{{questionData.type === 'mcq_single' ? 'radio' : 'checkbox'}}" [value]="option"
+                [(ngModel)]="selectedAnswer"> {{ option }}
+        </div>
+    </div>
+    <div *ngIf="questionData.type === 'yes_no'">
+        <button (click)="onSelect('Yes')">Yes</button>
+        <button (click)="onSelect('No')">No</button>
+    </div>
+</div>

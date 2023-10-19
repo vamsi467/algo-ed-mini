@@ -1,0 +1,9 @@
+<div class="container">
+    <app-progress-stepper [currentStep]="currentQuestionIndex + 1"
+        [totalSteps]="questions.length"></app-progress-stepper>
+    <app-question [questionData]="currentQuestion" (answerSelected)="onSelectAnswer($event)"></app-question>
+    <button type="button" class="btn btn-secondary" (click)="nextQuestion()">Next</button>
+    <button type="button" class="btn btn-secondary" (click)="previousQuestion()">Previous</button>
+    <button type="button" class="btn btn-success" (click)="submitQuiz()">Submit</button>
+
+</div>

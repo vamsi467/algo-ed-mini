@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Question, questions } from '../questions';
+import { questions, Question } from '../questions';
+
+
+export interface IScore {
+  'Verbal Reasoning'?: number;
+  'Geography'?: number;
+  'Aptitude'?: number;
+  'Total'?: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +17,10 @@ export class QuizDataService {
 
   private questions: Question[] = [...questions];
 
-  private userAnswersSubject = new BehaviorSubject<string[][]>([]);
+  private userAnswersSubject = new BehaviorSubject<{ [key: number]: string[] }>({});
   userAnswers$ = this.userAnswersSubject.asObservable();
 
-  private scoreSubject = new BehaviorSubject<number>(0);
+  private scoreSubject = new BehaviorSubject<IScore>({});
   score$ = this.scoreSubject.asObservable();
 
   constructor() { }
@@ -21,26 +29,55 @@ export class QuizDataService {
     return this.questions;
   }
 
-  setUserAnswer(questionIndex: number, answer: string[]): void {
+  setUserAnswer(questionID: number, answer: string[]): void {
     const currentAnswers = this.userAnswersSubject.value;
-    currentAnswers[questionIndex] = answer;
+    currentAnswers[questionID] = answer;
     this.userAnswersSubject.next(currentAnswers);
   }
 
   calculateScore(): void {
-    let score = 0;
-    this.userAnswersSubject.value.forEach((userAnswer, index) => {
-      const correctAnswer = this.questions[index].answer;
 
-      if (JSON.stringify(userAnswer.sort()) === JSON.stringify(correctAnswer.sort())) {
-        score++;
+    const answers = this.userAnswersSubject.getValue();
+    console.log('here', answers)
+    let scores: IScore = {
+      'Verbal Reasoning': 0,
+      'Geography': 0,
+      'Aptitude': 0,
+      'Total': 0,
+    };
+    let maxScores: IScore = {
+      'Verbal Reasoning': 0,
+      'Geography': 0,
+      'Aptitude': 0,
+      'Total': 0,
+    };
+    let percentScores: IScore = {
+      'Verbal Reasoning': 0,
+      'Geography': 0,
+      'Aptitude': 0,
+      'Total': 0,
+    };
+    this.questions.forEach((question, index) => {
+      if (JSON.stringify(answers[index]) === JSON.stringify(question.answer)) {
+        if (question.domain in scores) {
+          scores[question.domain]! += question.weight;
+        }
+        scores['Total']! += question.weight;
       }
+      maxScores[question.domain]! += question.weight;
+      maxScores['Total']! += question.weight;
     });
-    this.scoreSubject.next(score);
+    Object.keys(percentScores).forEach((ele) => {
+      const newEle = ele as 'Verbal Reasoning' | 'Geography' | 'Aptitude' | 'Total'
+      percentScores[newEle] = (scores[newEle]! / maxScores[newEle]! * 100);
+    })
+
+    this.scoreSubject.next(percentScores)
   }
 
+
   resetQuizData(): void {
-    this.userAnswersSubject.next([]);
-    this.scoreSubject.next(0);
+    this.userAnswersSubject.next({});
+    this.scoreSubject.next({});
   }
 }

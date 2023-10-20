@@ -1,14 +1,29 @@
-<div *ngIf="questionData">
-    <p>{{ questionData.question }}</p>
-    <div *ngIf="questionData.type === 'mcq_single' || questionData.type === 'mcq_multiple'">
-        <div *ngFor="let option of questionData.options">
-            <!-- Depending on the question type, show radio buttons or checkboxes -->
-            <input type="{{questionData.type === 'mcq_single' ? 'radio' : 'checkbox'}}" [value]="option"
-                [(ngModel)]="selectedAnswer"> {{ option }}
+<div *ngIf="questionData" class="card m-4" style="width: 500px; height:350px">
+    <div class="card-body">
+        <h5 class="card-title">Question</h5>
+        <p class="card-text">{{ questionData.question }} </p>
+        <ul class="list-group" *ngIf="questionData.type === 'mcq_single'">
+            <li class="list-group-item" *ngFor="let option of questionData.options">
+                <input class="form-check-input me-1" type='radio' [value]="option" [(ngModel)]="selectedAnswer"
+                    (change)="onSelect(option)"> {{ option
+                }}
+            </li>
+        </ul>
+        <ul class="list-group" *ngIf="questionData.type === 'mcq_multiple'">
+            <li class="list-group-item" *ngFor="let option of questionData.options">
+                <input class="form-check-input me-1" type='checkbox' [value]="option" (change)="onSelect(option)"> {{
+                option
+                }}
+            </li>
+        </ul>
+
+        <div *ngIf="questionData.type === 'yes_no'">
+            <button class="btn btn-secondary me-2" [class.btn-success]="selectedAnswer ==='Yes'"
+                (click)="onSelect('Yes')">Yes</button>
+            <button class="btn btn-secondary" [class.btn-success]="selectedAnswer === 'No'"
+                (click)="onSelect('No')">No</button>
         </div>
     </div>
-    <div *ngIf="questionData.type === 'yes_no'">
-        <button (click)="onSelect('Yes')">Yes</button>
-        <button (click)="onSelect('No')">No</button>
-    </div>
+
+
 </div>

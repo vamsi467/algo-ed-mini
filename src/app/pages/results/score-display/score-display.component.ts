@@ -7,5 +7,4 @@ import { Component, Input } from '@angular/core';
 })
 export class ScoreDisplayComponent {
   @Input() score: number = 0;
-  @Input() totalQuestions: number = 5;
 }

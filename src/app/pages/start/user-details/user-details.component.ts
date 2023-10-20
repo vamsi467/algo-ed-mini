@@ -1,19 +1,24 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserDetailsService } from 'src/app/services/user-details.service';
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent {
+
   userDetails = {
     fullName: '',
     email: ''
   };
 
-  @Output() userDetailsSubmitted = new EventEmitter<any>();
+  constructor(private router: Router, private userDetailsService: UserDetailsService) { }
 
   onSubmit(): void {
-    this.userDetailsSubmitted.emit(this.userDetails);
+    if (this.userDetails.fullName && this.userDetails.email) {
+      this.userDetailsService.setUserDetails(this.userDetails)
+      this.router.navigate(['/quiz']);
+    }
   }
 }

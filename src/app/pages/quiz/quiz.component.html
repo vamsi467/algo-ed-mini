@@ -1,9 +1,18 @@
 <div class="container">
-    <app-progress-stepper [currentStep]="currentQuestionIndex + 1"
-        [totalSteps]="questions.length"></app-progress-stepper>
-    <app-question [questionData]="currentQuestion" (answerSelected)="onSelectAnswer($event)"></app-question>
-    <button type="button" class="btn btn-secondary" (click)="nextQuestion()">Next</button>
-    <button type="button" class="btn btn-secondary" (click)="previousQuestion()">Previous</button>
-    <button type="button" class="btn btn-success" (click)="submitQuiz()">Submit</button>
+    <app-progress-stepper (stepTimedOut)="nextQuestion()" #stepper [steps]="questions"></app-progress-stepper>
+    <div class="d-flex justify-content-center w-100">
+        <app-question [questionData]="currentQuestion" (answerSelected)="onSelectAnswer($event)"></app-question>
+    </div>
+    <p class="d-flex justify-content-center w-100" *ngIf="questions.length === currentQuestionIndex">
+        Your have reached the end of test please submit
+    </p>
+
+    <div class="mt-2 d-flex justify-content-end w-100">
+        <button [disabled]="questions.length===currentQuestionIndex || !selectedAnswer.length" type="button"
+            class="btn btn-secondary me-2" (click)="nextQuestion()">Next</button>
+        <button type="button" [disabled]="questions.length !== currentQuestionIndex" class="btn btn-success me-2"
+            (click)="submitQuiz()">Submit</button>
+    </div>
+
 
 </div>

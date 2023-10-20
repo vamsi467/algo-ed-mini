@@ -1,6 +1,18 @@
 <div class="container">
-    <form (ngSubmit)="onSubmit()">
-        <!-- Full Name & Email fields as described in previous sections -->
-        <button type="submit">Submit</button>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" [(ngModel)]="userDetails.fullName"
+                required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" type="email" class="form-control" id="email"
+                name="email" [(ngModel)]="userDetails.email" required>
+        </div>
+
+        <p>Instructions: Answer all questions within the given time...</p>
+        <button [disabled]="!userForm.valid" type="submit" class="btn btn-primary">Start Quiz </button>
     </form>
 </div>

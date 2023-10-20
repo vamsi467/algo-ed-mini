@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { ProgressStepperComponent } from 'src/app/lib/progress-stepper/progress-stepper.component';
 import { Question } from 'src/app/questions';
 import { QuizDataService } from 'src/app/services/quiz-data.service';
 
@@ -10,32 +12,35 @@ import { QuizDataService } from 'src/app/services/quiz-data.service';
 export class QuizComponent implements OnInit {
   questions: Question[] = []
   currentQuestionIndex: number = 0;
-  selectedAnswers: string[] = [];
-  constructor(private _quizDataService: QuizDataService) {
+  selectedAnswer: string[] = [];
+  @ViewChild(ProgressStepperComponent)
+  stepper: ProgressStepperComponent = new ProgressStepperComponent;
+  constructor(private _quizDataService: QuizDataService, private router: Router,) {
 
   }
   ngOnInit(): void {
     this.questions = this._quizDataService.getQuestions()
+    this._quizDataService.resetQuizData()
   }
 
   get currentQuestion() {
     return this.questions[this.currentQuestionIndex];
   }
 
-  onSelectAnswer(answer: string): void {
-    this.selectedAnswers[this.currentQuestionIndex] = answer;
+  onSelectAnswer(answer: string[]): void {
+    this.selectedAnswer = answer;
   }
 
   nextQuestion() {
-    // Logic to go to the next question
-  }
+    this.stepper.nextStep()
+    this._quizDataService.setUserAnswer(this.currentQuestionIndex, this.selectedAnswer);
+    this.currentQuestionIndex++
+    this.selectedAnswer = []
 
-  previousQuestion() {
-    // Logic to go to the previous question
   }
 
   submitQuiz() {
-    // Logic to submit the quiz and calculate results
+    this.router.navigate(['/results']);
   }
 
 }

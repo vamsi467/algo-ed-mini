@@ -1,27 +1,62 @@
-# AlgoEdMini
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6.
+## Mini Quiz Application
 
-## Development server
+### Description:
+A comprehensive quiz application that allows users to test their knowledge across various domains, including Verbal Reasoning, Geography, and Aptitude.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Features:
 
-## Code scaffolding
+1. **User Details Collection**:
+   - Before starting the quiz, gather essential details of the user.
+   - Provides users with an overview of how the quiz operates.
+  
+2. **Quiz Page**:
+   - Displays questions from various domains with varying time limits for each.
+   - Supports different question types:
+     - Multiple Choice Questions with a single answer (`mcq_single`).
+     - Multiple Choice Questions with multiple answers (`mcq_multiple`).
+     - Yes/No questions (`yes_no`).
+   - Displays one question at a time, with a stepper to indicate the progress.
+   - Includes a timer for each question.
+  
+3. **Stepper with Timer**:
+   - Visual representation of quiz progress.
+   - Shows the allocated time for the current question.
+   - Completed steps are disabled to prevent going back.
+  
+4. **Score and Analysis Page**:
+   - Provides a breakdown of scores across different domains.
+   - Gives insight into the user's strengths and areas of improvement.
+5. **Navigation Guard**:
+   - Ensures that users have provided necessary details before accessing the quiz page.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Data Model:
 
-## Build
+The application adopts an extendable question structure allowing for multiple types of questions:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **QuestionBase** (Shared Attributes):
+  - `type`: Type of the question (`mcq_single`, `mcq_multiple`, or `yes_no`).
+  - `question`: The actual question content.
+  - `answer`: Correct answer(s) for the question.
+  - `duration`: Time in seconds allocated for the question.
+  - `domain`: The category of the question (Verbal Reasoning, Geography, Aptitude).
+  - `weight`: Points or weightage for the question.
 
-## Running unit tests
+- **MCQSingle**:
+  Inherits from `QuestionBase` and has additional attribute:
+  - `options`: Options for the question.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **MCQMultiple**:
+  Inherits from `QuestionBase` and has additional attribute:
+  - `options`: Options for the question.
 
-## Running end-to-end tests
+- **YesNoQuestion**:
+  Inherits from `QuestionBase` and specifies the type as `yes_no`.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Instructions for Setting Up:
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+1. Clone the repository.
+2. Navigate to the project directory.
+3. Install dependencies using `npm install`.
+4. Run the application using `ng serve`.
+5. Access the app on `http://localhost:4200/`.
